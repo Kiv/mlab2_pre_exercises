@@ -48,13 +48,13 @@ from einops import rearrange, repeat, reduce
 import torch as t
 
 
-def assert_all_equal(actual, expected):
+def assert_all_equal(actual: t.Tensor, expected: t.Tensor) -> None:
     assert actual.shape == expected.shape, f"Shape mismatch, got: {actual.shape}"
     assert (actual == expected).all(), f"Value mismatch, got: {actual}"
     print("Passed!")
 
 
-def assert_all_close(actual, expected, rtol=1e-05, atol=0.0001):
+def assert_all_close(actual: t.Tensor, expected: t.Tensor, rtol=1e-05, atol=0.0001) -> None:
     assert actual.shape == expected.shape, f"Shape mismatch, got: {actual.shape}"
     assert t.allclose(actual, expected, rtol=rtol, atol=atol)
     print("Passed!")
@@ -425,7 +425,7 @@ start = 1000
 matrix2 = t.arange(start + 1, start + 6).view((1, 5)).float()
 actual = batched_logsoftmax(matrix2)
 expected = t.tensor([[-4.4519, -3.4519, -2.4519, -1.4519, -0.4519]])
-assert_all_equal(actual, expected)
+assert_all_close(actual, expected)
 
 
 def batched_cross_entropy_loss(logits: t.Tensor, true_labels: t.Tensor) -> t.Tensor:
@@ -487,5 +487,99 @@ column_indexes = t.tensor([0, 2, 1, 0])
 actual = collect_columns(matrix, column_indexes)
 expected = t.tensor([[0, 3, 6, 9, 12], [2, 5, 8, 11, 14], [1, 4, 7, 10, 13], [0, 3, 6, 9, 12]])
 assert_all_equal(actual, expected)
+
+```
+
+## Practice with `torch.as_strided`
+
+If you're not familiar with `as_strided`, a couple good resources are:
+
+- [NumPy For Your Grandma (4 minute video)](https://www.youtube.com/watch?v=VlkzN00P0Bc)
+- [as_strided and sum are all you need](https://jott.live/markdown/as_strided)
+
+Fill in the "size" and "stride" arguments so that a call to `as_strided` produces the desired output.
+
+
+```python
+from collections import namedtuple
+
+TestCase = namedtuple("TestCase", ["output", "size", "stride"])
+test_input_a = t.tensor([[0, 1, 2, 3, 4], [5, 6, 7, 8, 9], [10, 11, 12, 13, 14], [15, 16, 17, 18, 19]])
+test_cases = [
+    TestCase(output=t.tensor([0, 1, 2, 3]), size=(1,), stride=(1,)),
+    TestCase(output=t.tensor([[0, 1, 2], [5, 6, 7]]), size=(1,), stride=(1,)),
+    TestCase(output=t.tensor([[0, 0, 0], [11, 11, 11]]), size=(1,), stride=(1,)),
+    TestCase(output=t.tensor([0, 6, 12, 18]), size=(1,), stride=(1,)),
+    TestCase(output=t.tensor([[[0, 1, 2]], [[9, 10, 11]]]), size=(1,), stride=(1,)),
+    TestCase(
+        output=t.tensor([[[[0, 1], [2, 3]], [[4, 5], [6, 7]]], [[[12, 13], [14, 15]], [[16, 17], [18, 19]]]]),
+        size=(1,),
+        stride=(1,),
+    ),
+]
+for (i, case) in enumerate(test_cases):
+    actual = test_input_a.as_strided(size=case.size, stride=case.stride)
+    if (case.output != actual).any():
+        print(f"Test {i} failed:")
+        print(f"Expected: {case.output}")
+        print(f"Actual: {actual}")
+    else:
+        print(f"Test {i} passed!")
+
+```
+
+## Implementing ReLU
+
+Implement ReLU five different ways.
+
+```python
+def test_relu(relu_func):
+    print(f"Testing: {relu_func.__name__}")
+    x = t.arange(-1, 3, dtype=t.float32, requires_grad=True)
+    out = relu_func(x)
+    expected = t.tensor([0.0, 0.0, 1.0, 2.0])
+    assert_all_close(out, expected)
+
+
+def relu_clone_setitem(x: t.Tensor) -> t.Tensor:
+    """Make a copy with torch.clone and then assign to parts of the copy."""
+    x = x.clone()
+    x[x < 0.0] = 0.0
+    return x
+
+
+test_relu(relu_clone_setitem)
+
+
+def relu_where(x: t.Tensor) -> t.Tensor:
+    """Use torch.where."""
+    return t.where(x > 0.0, x, t.tensor(0.0))
+
+
+test_relu(relu_where)
+
+
+def relu_maximum(x: t.Tensor) -> t.Tensor:
+    """Use torch.maximum."""
+    return t.maximum(x, t.tensor(0.0))
+
+
+test_relu(relu_maximum)
+
+
+def relu_abs(x: t.Tensor) -> t.Tensor:
+    """Use torch.abs."""
+    return (x.abs() + x) / 2.0
+
+
+test_relu(relu_abs)
+
+
+def relu_multiply_bool(x: t.Tensor) -> t.Tensor:
+    """Create a boolean tensor and multiply the input by it elementwise."""
+    return x * (x > 0)
+
+
+test_relu(relu_multiply_bool)
 
 ```
