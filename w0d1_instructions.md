@@ -27,15 +27,20 @@ We will be using [Visual Studio Code](https://code.visualstudio.com/) as the off
 - Enable word wrap in VS Code using Alt+Z or View -> Word Wrap.
 - You can have a Jupyter-like notebook experience within a regular `.py` file by using the special comment `# %%` to delimit notebook cells. VS Code will recognize these and give you the option to run cells (Shift-Enter by default on my machine) or debug cells individually.
 
+## Workflow
+
+- The most basic thing you can do is copy the exercises into a new `.py` file and run the file as a normal script. Wherever you see a `pass` statement, this is where you write your code so that the function behaves as described and the assertions pass.
+- It's more efficient to use the REPL and split up your `.py` file with notebook cells using `# %%`. Write and check your code one line at a time, verifying they do what you expect and only once you think it's working, paste it into the function body to confirm. This avoids spending time figuring out which line of code isn't working properly.
+
 ## Tips
 
 - To get the most out of these exercises, make sure you understand why all of the assertions should be true, and feel free to add more assertions.
-- A good workflow is writing expressions in the REPL first until you get it working, and then pasting it into the function. Alternately, write expressions inside the function, and use the debugger and debug console together to get it working. The point is to avoid wondering which line is not doing what you expect by verifying each line as you go.
 - If you're having trouble writing a batched computation, try doing the unbatched version first.
+- If you find these exercises challenging, it would be beneficial to go through them a second time so they feel more natural.
 
 ## Support
 
-At some point you'll be able to ask questions in the MLAB Slack. If you need help before then, feel free to contact `chris` at `rdwrs.com`.
+At some point you'll be added to a MLAB Slack and be able to ask questions there. If you need help before then, feel free to email `chris` at `rdwrs.com` directly.
 
 ```python
 import math
