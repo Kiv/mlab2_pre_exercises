@@ -543,9 +543,7 @@ def test_relu(relu_func):
 
 def relu_clone_setitem(x: t.Tensor) -> t.Tensor:
     """Make a copy with torch.clone and then assign to parts of the copy."""
-    x = x.clone()
-    x[x < 0.0] = 0.0
-    return x
+    pass
 
 
 test_relu(relu_clone_setitem)
@@ -553,7 +551,7 @@ test_relu(relu_clone_setitem)
 
 def relu_where(x: t.Tensor) -> t.Tensor:
     """Use torch.where."""
-    return t.where(x > 0.0, x, t.tensor(0.0))
+    pass
 
 
 test_relu(relu_where)
@@ -561,7 +559,7 @@ test_relu(relu_where)
 
 def relu_maximum(x: t.Tensor) -> t.Tensor:
     """Use torch.maximum."""
-    return t.maximum(x, t.tensor(0.0))
+    pass
 
 
 test_relu(relu_maximum)
@@ -569,7 +567,7 @@ test_relu(relu_maximum)
 
 def relu_abs(x: t.Tensor) -> t.Tensor:
     """Use torch.abs."""
-    return (x.abs() + x) / 2.0
+    pass
 
 
 test_relu(relu_abs)
@@ -577,7 +575,7 @@ test_relu(relu_abs)
 
 def relu_multiply_bool(x: t.Tensor) -> t.Tensor:
     """Create a boolean tensor and multiply the input by it elementwise."""
-    return x * (x > 0)
+    pass
 
 
 test_relu(relu_multiply_bool)
