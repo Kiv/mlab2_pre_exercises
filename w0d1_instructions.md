@@ -475,8 +475,6 @@ def collect_columns(matrix: t.Tensor, column_indexes: t.Tensor) -> t.Tensor:
     column_indexes: shape (k,). Each value is an integer in [0..n).
 
     Return: shape (m, k). out[:, i] is matrix[:, column_indexes[i]].
-
-    Bonus: explain why matrix[:, column_indexes] doesn't work as a solution.
     """
     assert column_indexes.max() < matrix.shape[1]
     pass
