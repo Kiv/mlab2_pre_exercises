@@ -9,7 +9,7 @@ These exercises will prepare you for actual implementation challenges that will 
 
 If you don't have Python 3.8 or higher installed, the most foolproof way is to first install Miniconda from:
 
-[https://docs.conda.io/en/latest/miniconda.htm](https://docs.conda.io/en/latest/miniconda.htm)
+[https://docs.conda.io/en/latest/miniconda.html](https://docs.conda.io/en/latest/miniconda.html)
 
 ### Installing PyTorch
 
